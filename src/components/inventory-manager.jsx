@@ -154,7 +154,7 @@ export function InventoryManagerComponent() {
       <div
         className={`bg-white w-64 shadow-lg fixed inset-y-0 left-0 transform ${sidebarOpen ? 'translate-x-0' : '-translate-x-full'} transition-transform duration-300 ease-in-out lg:translate-x-0 lg:static lg:inset-0`}>
         <div className="flex items-center justify-center h-20 shadow-md">
-          <h1 className="text-3xl font-bold text-primary">Urban Wear</h1>
+          <h1 className="text-3xl font-bold text-primary">BOUTIQUE BFF</h1>
         </div>
         <nav className="mt-10">
           <a
@@ -235,10 +235,15 @@ export function InventoryManagerComponent() {
                       <Plus className="mr-2 h-4 w-4" /> Nuevo Producto
                     </Button>
                   </DialogTrigger>
-                  <DialogContent className="sm:max-w-[425px]">
+
+                  <DialogContent
+                    className="sm:max-w-[425px] bg-white shadow-lg rounded-lg p-4 z-50"
+                    style={{ backgroundColor: 'white', opacity: 1 }}
+                  >
                     <DialogHeader>
                       <DialogTitle>Agregar Nuevo Producto</DialogTitle>
                     </DialogHeader>
+
                     <div className="grid gap-4 py-4">
                       <Input
                         placeholder="ID"
@@ -524,7 +529,10 @@ export function InventoryManagerComponent() {
                       <Plus className="mr-2 h-4 w-4" /> Nuevo Proveedor
                     </Button>
                   </DialogTrigger>
-                  <DialogContent className="sm:max-w-[425px]">
+                  <DialogContent
+                    className="sm:max-w-[425px] bg-white shadow-lg rounded-lg p-4 z-50"
+                    style={{ backgroundColor: 'white', opacity: 1 }}
+                  >
                     <DialogHeader>
                       <DialogTitle>Agregar Nuevo Proveedor</DialogTitle>
                     </DialogHeader>
