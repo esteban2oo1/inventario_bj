@@ -40,6 +40,7 @@ export function InventoryManagerComponent() {
   const [sidebarOpen, setSidebarOpen] = useState(false)
   const [editingProduct, setEditingProduct] = useState(null)
   const [editingSupplier, setEditingSupplier] = useState(null)
+  
 
   const handleInputChange = (e, setter) => {
     const { name, value } = e.target
@@ -50,28 +51,28 @@ export function InventoryManagerComponent() {
     // Verificar si todos los campos están llenos
     const requiredFields = ['id', 'name', 'brand', 'size', 'price', 'quantity', 'category'];
     const isFormComplete = requiredFields.every(field => newProduct[field] && newProduct[field].trim() !== '');
-  
+    
     if (!isFormComplete) {
       alert('Por favor, complete todos los campos antes de agregar el producto.');
       return;
     }
-  
+    
     // Verificar si el ID es único
     if (products.some(p => p.id === newProduct.id)) {
       alert('El ID del producto ya existe. Por favor, ingrese un ID único.');
       return;
     }
-  
+    
     // Crear el nuevo producto con los valores ajustados
     const productToAdd = {
       ...newProduct,
       price: parseFloat(newProduct.price).toFixed(2), // Formatear precio a dos decimales
       quantity: parseInt(newProduct.quantity, 10).toString() // Convertir cantidad a cadena
     };
-  
+    
     // Actualizar la lista de productos
     setProducts(prev => [...prev, productToAdd]);
-  
+    
     // Limpiar el formulario
     setNewProduct({
       id: '', name: '', brand: '', size: '', price: '', quantity: '', category: ''
@@ -79,6 +80,7 @@ export function InventoryManagerComponent() {
   };
   
   
+
 
 
   const addSale = () => {
@@ -93,14 +95,51 @@ export function InventoryManagerComponent() {
     }
   }
 
+
+
+
+
+
+
+
   const addSupplier = () => {
-    if (newSupplier.id && !suppliers.some(s => s.id === newSupplier.id)) {
-      setSuppliers(prev => [...prev, newSupplier])
-      setNewSupplier({ id: '', name: '', contact: '', email: '', phone: '', address: '' })
-    } else {
-      alert('Por favor, ingrese un ID único para el proveedor')
+    // Lista de campos obligatorios
+    const requiredFields = ['id', 'name', 'contact', 'email', 'phone', 'address'];
+  
+    // Verificar que todos los campos estén llenos
+    const isFormComplete = requiredFields.every(field => newSupplier[field] && newSupplier[field].trim() !== '');
+  
+    if (!isFormComplete) {
+      alert('Por favor, complete todos los campos antes de agregar el proveedor.');
+      return;
     }
-  }
+  
+    // Verificar que el ID sea único
+    if (suppliers.some(supplier => supplier.id === newSupplier.id)) {
+      alert('El ID del proveedor ya existe. Por favor, ingrese un ID único.');
+      return;
+    }
+  
+    // Agregar el nuevo proveedor
+    setSuppliers(prev => [...prev, newSupplier]);
+  
+    // Limpiar el formulario
+    setNewSupplier({
+      id: '',
+      name: '',
+      contact: '',
+      email: '',
+      phone: '',
+      address: ''
+    });
+  };
+  
+
+
+
+
+
+
 
   const deleteProduct = (id) => {
     setProducts(prev => prev.filter(p => p.id !== id))
@@ -247,73 +286,71 @@ export function InventoryManagerComponent() {
                   onChange={(e) => setSearchTerm(e.target.value)}
                   className="max-w-sm" />
                 <Dialog>
-                  <DialogTrigger asChild>
-                    <Button>
-                      <Plus className="mr-2 h-4 w-4" /> Nuevo Producto
-                    </Button>
-                  </DialogTrigger>
+                <DialogTrigger asChild>
+                  <Button>
+                    <Plus className="mr-2 h-4 w-4" /> Nuevo Producto
+                  </Button>
+                </DialogTrigger>
 
-                  <DialogContent
-                    className="sm:max-w-[425px] bg-white shadow-lg rounded-lg p-4 z-50"
-                    style={{ backgroundColor: 'white', opacity: 1 }}
-                  >
-                    <DialogHeader>
-                      <DialogTitle>Agregar Nuevo Producto</DialogTitle>
-                    </DialogHeader>
+                <DialogContent
+                  className="sm:max-w-[425px] bg-white shadow-lg rounded-lg p-4 z-50"
+                  style={{ backgroundColor: 'white', opacity: 1 }}>
+                  <DialogHeader>
+                    <DialogTitle>Agregar Nuevo Producto</DialogTitle>
+                  </DialogHeader>
 
-                    <div className="grid gap-4 py-4">
-                      <Input
-                        placeholder="ID"
-                        name="id"
-                        value={newProduct.id}
-                        onChange={(e) => handleInputChange(e, setNewProduct)} />
-                      <Input
-                        placeholder="Nombre"
-                        name="name"
-                        value={newProduct.name}
-                        onChange={(e) => handleInputChange(e, setNewProduct)} />
-                      <Input
-                        placeholder="Marca"
-                        name="brand"
-                        value={newProduct.brand}
-                        onChange={(e) => handleInputChange(e, setNewProduct)} />
-                      <Input
-                        placeholder="Talla"
-                        name="size"
-                        value={newProduct.size}
-                        onChange={(e) => handleInputChange(e, setNewProduct)} />
-                      <Input
-                        type="text"
-                        placeholder="Precio"
-                        name="price"
-                        value={newProduct.price}
-                        onChange={(e) => handleInputChange(e, setNewProduct)} />
-                      <Input
-                        type="text"
-                        placeholder="Cantidad"
-                        name="quantity"
-                        value={newProduct.quantity}
-                        onChange={(e) => handleInputChange(e, setNewProduct)} />
-                      <Select
-                        name="category"
-                        onValueChange={(value) => setNewProduct(prev => ({ ...prev, category: value }))}>
-                        <SelectTrigger>
-                          <SelectValue placeholder="Seleccionar categoría" />
-                        </SelectTrigger>
-                        <SelectContent>
-                          {categories.map(category => (
-                            <SelectItem key={category} value={category}>{category}</SelectItem>
-                          ))}
-                        </SelectContent>
-                      </Select>
-                    </div>
-                    <Button onClick={addProduct}>Agregar Producto</Button>
-                  </DialogContent>
-                </Dialog>
+                  <div className="grid gap-4 py-4">
+                    <Input
+                      placeholder="ID"
+                      name="id"
+                      value={newProduct.id}
+                      onChange={(e) => handleInputChange(e, setNewProduct)} />
+                    <Input
+                      placeholder="Nombre"
+                      name="name"
+                      value={newProduct.name}
+                      onChange={(e) => handleInputChange(e, setNewProduct)} />
+                    <Input
+                      placeholder="Marca"
+                      name="brand"
+                      value={newProduct.brand}
+                      onChange={(e) => handleInputChange(e, setNewProduct)} />
+                    <Input
+                      placeholder="Talla"
+                      name="size"
+                      value={newProduct.size}
+                      onChange={(e) => handleInputChange(e, setNewProduct)} />
+                    <Input
+                      type="text"
+                      placeholder="Precio"
+                      name="price"
+                      value={newProduct.price}
+                      onChange={(e) => handleInputChange(e, setNewProduct)} />
+                    <Input
+                      type="text"
+                      placeholder="Cantidad"
+                      name="quantity"
+                      value={newProduct.quantity}
+                      onChange={(e) => handleInputChange(e, setNewProduct)} />
+                    <Select
+                      name="category"
+                      onValueChange={(value) => setNewProduct(prev => ({ ...prev, category: value }))}>
+                      <SelectTrigger>
+                        <SelectValue placeholder="Seleccionar categoría" />
+                      </SelectTrigger>
+                      <SelectContent>
+                        {categories.map(category => (
+                          <SelectItem key={category} value={category}>{category}</SelectItem>
+                        ))}
+                      </SelectContent>
+                    </Select>
+                  </div>
+                  <Button onClick={addProduct}>Agregar Producto</Button>
+                </DialogContent>
+              </Dialog>
               </div>
               <Tabs defaultValue="Camisas">
                 <TabsList>
-                  
                   {categories.map(category => (
                     <TabsTrigger key={category} value={category}>{category}</TabsTrigger>
                   ))}
@@ -423,37 +460,38 @@ export function InventoryManagerComponent() {
 
 
 
-
           
 
           {activeSection === 'sales' && (
             <>
-              <Card className="mb-6">
-                <CardHeader>
-                  <CardTitle>Registrar Venta</CardTitle>
-                </CardHeader>
-                <CardContent>
-                  <div className="grid grid-cols-2 gap-4">
-                    <Select
-                      onValueChange={(value) => setNewSale(prev => ({ ...prev, productId: value }))}>
-                      <SelectTrigger>
-                        <SelectValue placeholder="Seleccionar producto" />
-                      </SelectTrigger>
-                      <SelectContent>
-                        {products.map(product => (
-                          <SelectItem key={product.id} value={product.id}>{product.name}</SelectItem>
-                        ))}
-                      </SelectContent>
-                    </Select>
-                    <Input
-                      type="number"
-                      placeholder="Cantidad"
-                      value={newSale.quantity}
-                      onChange={(e) => setNewSale(prev => ({ ...prev, quantity: Number(e.target.value) }))} />
-                  </div>
-                  <Button className="mt-4" onClick={addSale}>Registrar Venta</Button>
-                </CardContent>
-              </Card>
+        <Card className="mb-6">
+          <CardHeader>
+            <CardTitle>Registrar Venta</CardTitle>
+          </CardHeader>
+          <CardContent>
+            <div className="grid grid-cols-2 gap-4">
+              <Select
+                onValueChange={(value) => setNewSale(prev => ({ ...prev, productId: value }))}>
+                <SelectTrigger>
+                  <SelectValue placeholder="Seleccionar producto" />
+                </SelectTrigger>
+                <SelectContent>
+                  {filteredProducts.map(product => (
+                    <SelectItem key={product.id} value={product.id}>
+                      {product.name} - {product.brand}
+                    </SelectItem>
+                  ))}
+                </SelectContent>
+              </Select>
+              <Input
+                type="number"
+                placeholder="Cantidad"
+                value={newSale.quantity}
+                onChange={(e) => setNewSale(prev => ({ ...prev, quantity: Number(e.target.value) }))} />
+            </div>
+            <Button className="mt-4" onClick={addSale}>Registrar Venta</Button>
+          </CardContent>
+        </Card>
               <Card>
                 <CardHeader>
                   <CardTitle>Ventas del Día</CardTitle>
