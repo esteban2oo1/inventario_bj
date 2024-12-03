@@ -47,20 +47,39 @@ export function InventoryManagerComponent() {
   }
 
   const addProduct = () => {
-    if (newProduct.id && !products.some(p => p.id === newProduct.id)) {
-      const productToAdd = {
-        ...newProduct,
-        price: parseFloat(newProduct.price).toFixed(2),
-        quantity: parseInt(newProduct.quantity, 10).toString()
-      }
-      setProducts(prev => [...prev, productToAdd])
-      setNewProduct(
-        { id: '', name: '', brand: '', size: '', price: '', quantity: '', category: '' }
-      )
-    } else {
-      alert('Por favor, ingrese un ID único para el producto')
+    // Verificar si todos los campos están llenos
+    const requiredFields = ['id', 'name', 'brand', 'size', 'price', 'quantity', 'category'];
+    const isFormComplete = requiredFields.every(field => newProduct[field] && newProduct[field].trim() !== '');
+  
+    if (!isFormComplete) {
+      alert('Por favor, complete todos los campos antes de agregar el producto.');
+      return;
     }
-  }
+  
+    // Verificar si el ID es único
+    if (products.some(p => p.id === newProduct.id)) {
+      alert('El ID del producto ya existe. Por favor, ingrese un ID único.');
+      return;
+    }
+  
+    // Crear el nuevo producto con los valores ajustados
+    const productToAdd = {
+      ...newProduct,
+      price: parseFloat(newProduct.price).toFixed(2), // Formatear precio a dos decimales
+      quantity: parseInt(newProduct.quantity, 10).toString() // Convertir cantidad a cadena
+    };
+  
+    // Actualizar la lista de productos
+    setProducts(prev => [...prev, productToAdd]);
+  
+    // Limpiar el formulario
+    setNewProduct({
+      id: '', name: '', brand: '', size: '', price: '', quantity: '', category: ''
+    });
+  };
+  
+  
+
 
   const addSale = () => {
     const saleProduct = products.find(p => p.id === newSale.productId)
@@ -185,13 +204,6 @@ export function InventoryManagerComponent() {
             <Truck className="h-5 w-5" />
             <span className="mx-3">Proveedores</span>
           </a>
-          <a
-            className={`flex items-center mt-4 py-2 px-6 ${activeSection === 'statistics' ? 'bg-gray-200 text-gray-700' : 'text-gray-500 hover:bg-gray-200 hover:text-gray-700'} transition-colors duration-200`}
-            href="#"
-            onClick={() => setActiveSection('statistics')}>
-            <TrendingUp className="h-5 w-5" />
-            <span className="mx-3">Estadísticas</span>
-          </a>
         </nav>
       </div>
       {/* Main Content */}
@@ -221,6 +233,11 @@ export function InventoryManagerComponent() {
 
         {/* Main content */}
         <main className="flex-1 overflow-x-hidden overflow-y-auto bg-gray-200 p-6">
+
+
+
+
+
           {activeSection === 'products' && (
             <>
               <div className="flex justify-between items-center mb-6">
@@ -404,6 +421,11 @@ export function InventoryManagerComponent() {
             </>
           )}
 
+
+
+
+          
+
           {activeSection === 'sales' && (
             <>
               <Card className="mb-6">
@@ -452,6 +474,10 @@ export function InventoryManagerComponent() {
             </>
           )}
 
+
+
+
+
           {activeSection === 'inventory' && (
             <Card>
               <CardHeader>
@@ -473,7 +499,6 @@ export function InventoryManagerComponent() {
                       <TableHead>Precio</TableHead>
                       <TableHead>Cantidad</TableHead>
                       <TableHead>Categoría</TableHead>
-                      <TableHead>Acciones</TableHead>
                     </TableRow>
                   </TableHeader>
                   <TableBody>
@@ -486,27 +511,6 @@ export function InventoryManagerComponent() {
                         <TableCell>${parseFloat(product.price).toFixed(2)}</TableCell>
                         <TableCell>{product.quantity}</TableCell>
                         <TableCell>{product.category}</TableCell>
-                        <TableCell>
-                          <Button
-                            onClick={() => startEditing(product.id, 'product')}
-                            size="sm"
-                            className="mr-2">
-                            <Pencil className="h-4 w-4" />
-                          </Button>
-                          <Button
-                            onClick={() => deleteProduct(product.id)}
-                            size="sm"
-                            variant="destructive"
-                            className="mr-2">
-                            <Trash className="h-4 w-4" />
-                          </Button>
-                          <Button
-                            onClick={() => updateItem(product.id, 'product')}
-                            size="sm"
-                            variant="outline">
-                            <RefreshCw className="h-4 w-4" />
-                          </Button>
-                        </TableCell>
                       </TableRow>
                     ))}
                   </TableBody>
@@ -514,6 +518,12 @@ export function InventoryManagerComponent() {
               </CardContent>
             </Card>
           )}
+
+
+
+
+
+
 
           {activeSection === 'suppliers' && (
             <>
@@ -677,26 +687,6 @@ export function InventoryManagerComponent() {
             </>
           )}
 
-          {activeSection === 'statistics' && (
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-              <Card>
-                <CardHeader>
-                  <CardTitle>Estado del Inventario</CardTitle>
-                </CardHeader>
-                <CardContent>
-                  {/* Aquí iría el gráfico de inventario */}
-                </CardContent>
-              </Card>
-              <Card>
-                <CardHeader>
-                  <CardTitle>Ventas Diarias</CardTitle>
-                </CardHeader>
-                <CardContent>
-                  {/* Aquí iría el gráfico de ventas */}
-                </CardContent>
-              </Card>
-            </div>
-          )}
         </main>
       </div>
     </div>)
